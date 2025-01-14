@@ -4,7 +4,7 @@ from Bio import Entrez
 import itertools
 
 # Configuração do e-mail do Entrez
-Entrez.email = "seu@email.com"  # Substitua pelo seu e-mail
+Entrez.email = "gouveiaunb@gmail.com"  # Substitua pelo seu e-mail
 
 # Função para gerar combinações de termos
 def generate_combinations(terms):
