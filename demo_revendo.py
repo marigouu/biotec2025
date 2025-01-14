@@ -53,8 +53,11 @@ def main():
     
     # Caixa de entrada para o intervalo de anos
     st.write("Intervalo de anos:")
-    year_start = st.number_input("De", min_value=1900, max_value=2100, value=2020)
-    year_end = st.number_input("Até", min_value=1900, max_value=2100, value=2024)
+    col1, col2 = st.columns(2)
+    with col1:
+        start_year = st.number_input("De:", min_value=1900, max_value=2100, value=2020)
+    with col2:
+        end_year = st.number_input("Até:", min_value=1900, max_value=2100, value=2024)
 
     # Geração de combinações de termos (para a primeira tabela)
     terms = terms_input.split(",")
@@ -63,7 +66,7 @@ def main():
     results_single_term_or_more = []
     for combo in combinations_single_term_or_more:
         row = {"combination": combo}
-        for year in range(year_start, year_end + 1):
+        for year in range(start_year, end_year + 1):
             count, ids = fetch_article_counts(combo, year)
             row[year] = count
         results_single_term_or_more.append(row)
@@ -80,7 +83,7 @@ def main():
     detailed_articles = []
     for combo in combinations_multiple_terms:
         row = {"combination": combo}
-        for year in range(year_start, year_end + 1):
+        for year in range(start_year, end_year + 1):
             count, ids = fetch_article_counts(combo, year)
             row[year] = count
             # Buscar detalhes dos artigos mais relevantes
