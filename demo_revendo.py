@@ -4,7 +4,7 @@ from Bio import Entrez
 import itertools
 
 # Configuração do e-mail do Entrez
-Entrez.email = "seu@email.com"  # Substitua pelo seu e-mail
+Entrez.email = "gouveia.unb@gmail.com"  # Substitua pelo seu e-mail
 
 # Função para gerar combinações de termos (incluindo combinações de um ou mais termos)
 def generate_combinations(terms, min_terms=1):
@@ -50,8 +50,12 @@ def main():
 
     # Entrada do usuário
     terms_input = st.text_input("Insira os termos de pesquisa separados por vírgula:", "machine learning, drug discovery, cancer")
-    years = st.slider("Selecione o intervalo de anos:", 2000, 2030, (2020, 2024))
     
+    # Caixa de entrada para o intervalo de anos
+    st.write("Intervalo de anos:")
+    year_start = st.number_input("De", min_value=1900, max_value=2100, value=2020)
+    year_end = st.number_input("Até", min_value=1900, max_value=2100, value=2024)
+
     # Geração de combinações de termos (para a primeira tabela)
     terms = terms_input.split(",")
     combinations_single_term_or_more = generate_combinations(terms, min_terms=1)
@@ -59,7 +63,7 @@ def main():
     results_single_term_or_more = []
     for combo in combinations_single_term_or_more:
         row = {"combination": combo}
-        for year in range(years[0], years[1] + 1):
+        for year in range(year_start, year_end + 1):
             count, ids = fetch_article_counts(combo, year)
             row[year] = count
         results_single_term_or_more.append(row)
@@ -76,7 +80,7 @@ def main():
     detailed_articles = []
     for combo in combinations_multiple_terms:
         row = {"combination": combo}
-        for year in range(years[0], years[1] + 1):
+        for year in range(year_start, year_end + 1):
             count, ids = fetch_article_counts(combo, year)
             row[year] = count
             # Buscar detalhes dos artigos mais relevantes
