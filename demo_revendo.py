@@ -123,13 +123,13 @@ def main():
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         )
 
-    # Baixar tabela de quantidade por ano (para combinações de termos)
-    download_as_txt(df_single_term_or_more, "quantidade_artigos_por_ano_combinacoes")
-    download_as_xlsx(df_single_term_or_more, "quantidade_artigos_por_ano_combinacoes")
+    # Baixar tabela de quantidade por ano
+    download_as_txt(df_single_term_or_more, "quantidade_artigos_por_ano")
+    download_as_xlsx(df_single_term_or_more, "quantidade_artigos_por_ano")
 
-    # Baixar tabela de artigos mais relevantes (para combinações de termos)
-    download_as_txt(df_relevant, "artigos_mais_relevantes_combinacoes")
-    download_as_xlsx(df_relevant, "artigos_mais_relevantes_combinacoes")
+    # Baixar tabela de artigos mais relevantes
+    download_as_txt(df_relevant, "artigos_mais_relevantes")
+    download_as_xlsx(df_relevant, "artigos_mais_relevantes")
 
 if __name__ == "__main__":
     main()
