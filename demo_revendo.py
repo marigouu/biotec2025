@@ -79,7 +79,7 @@ def main():
                 row[year] = count
             results_single_term_or_more.append(row)
 
-        st.subheader("Quantidade de Artigos por Ano (Combinações de Termos)")
+        st.subheader("Quantidade de Artigos por Ano")
         df_single_term_or_more = pd.DataFrame(results_single_term_or_more)
         st.write(df_single_term_or_more)
 
@@ -105,7 +105,7 @@ def main():
                 break
 
         if detailed_articles:
-            st.subheader("Artigos Mais Relevantes (Prioridade para Combinações com N Termos)")
+            st.subheader("Artigos Mais Relevantes")
             df_relevant = pd.DataFrame(detailed_articles)
             st.write(df_relevant)
 
