@@ -83,6 +83,33 @@ def main():
         df_single_term_or_more = pd.DataFrame(results_single_term_or_more)
         st.write(df_single_term_or_more)
 
+        # Funções para baixar tabelas
+        def download_as_txt(df, filename):
+            txt_data = df.to_string(index=False)
+            st.download_button(
+                label=f"Baixar {filename} (TXT)",
+                data=txt_data.encode('utf-8'),
+                file_name=f"{filename}.txt",
+                mime="text/plain",
+            )
+
+        def download_as_xlsx(df, filename):
+            xlsx_file = pd.ExcelWriter(f"{filename}.xlsx", engine="openpyxl")
+            df.to_excel(xlsx_file, index=False, sheet_name="Sheet1")
+            xlsx_file.close()
+            with open(f"{filename}.xlsx", "rb") as f:
+                xlsx_data = f.read()
+            st.download_button(
+                label=f"Baixar {filename} (XLSX)",
+                data=xlsx_data,
+                file_name=f"{filename}.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            )
+
+        # Baixar a primeira tabela
+        download_as_txt(df_single_term_or_more, "quantidade_artigos_por_ano")
+        download_as_xlsx(df_single_term_or_more, "quantidade_artigos_por_ano")
+
         # Tabela 2: Artigos mais relevantes
         detailed_articles = []
 
@@ -109,29 +136,7 @@ def main():
             df_relevant = pd.DataFrame(detailed_articles)
             st.write(df_relevant)
 
-            # Baixar tabelas relevantes
-            def download_as_txt(df, filename):
-                txt_data = df.to_string(index=False)
-                st.download_button(
-                    label=f"Baixar {filename} (TXT)",
-                    data=txt_data.encode('utf-8'),
-                    file_name=f"{filename}.txt",
-                    mime="text/plain",
-                )
-
-            def download_as_xlsx(df, filename):
-                xlsx_file = pd.ExcelWriter(f"{filename}.xlsx", engine="openpyxl")
-                df.to_excel(xlsx_file, index=False, sheet_name="Sheet1")
-                xlsx_file.close()
-                with open(f"{filename}.xlsx", "rb") as f:
-                    xlsx_data = f.read()
-                st.download_button(
-                    label=f"Baixar {filename} (XLSX)",
-                    data=xlsx_data,
-                    file_name=f"{filename}.xlsx",
-                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                )
-
+            # Baixar a segunda tabela
             download_as_txt(df_relevant, "artigos_mais_relevantes")
             download_as_xlsx(df_relevant, "artigos_mais_relevantes")
 
