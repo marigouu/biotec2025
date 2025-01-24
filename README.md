@@ -1,2 +1,2 @@
 # biotec2025
-repositório de códigos utilizados para desenvolvimento de ferramentas do meu estágio obrigatório em biotecnologia
+repositório de códigos e materiais produzidos ao longo do meu estágio final em Biotecnologia
