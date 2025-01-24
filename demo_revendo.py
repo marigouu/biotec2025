@@ -79,9 +79,15 @@ def main():
                 row[year] = count
             results_single_term_or_more.append(row)
 
+        st.session_state["df_single_term_or_more"] = pd.DataFrame(results_single_term_or_more)
+        st.session_state["terms"] = terms
+        st.session_state["start_year"] = start_year
+        st.session_state["end_year"] = end_year
+        st.session_state["max_articles"] = max_articles
+
+    if "df_single_term_or_more" in st.session_state:
         st.subheader("Quantidade de Artigos por Ano")
-        df_single_term_or_more = pd.DataFrame(results_single_term_or_more)
-        st.write(df_single_term_or_more)
+        st.write(st.session_state["df_single_term_or_more"])
 
         # Funções para baixar tabelas
         def download_as_txt(df, filename):
@@ -107,41 +113,39 @@ def main():
             )
 
         # Baixar a primeira tabela
-        download_as_txt(df_single_term_or_more, "quantidade_artigos_por_ano")
-        download_as_xlsx(df_single_term_or_more, "quantidade_artigos_por_ano")
+        download_as_txt(st.session_state["df_single_term_or_more"], "quantidade_artigos_por_ano")
+        download_as_xlsx(st.session_state["df_single_term_or_more"], "quantidade_artigos_por_ano")
 
+    if "terms" in st.session_state:
         # Tabela 2: Artigos mais relevantes
         detailed_articles = []
 
         # Priorizar combinações com mais termos
-        for num_terms in range(len(terms), 0, -1):  # De N para 1
-            combinations_multiple_terms = generate_combinations(terms, min_terms=num_terms)
+        for num_terms in range(len(st.session_state["terms"]), 0, -1):  # De N para 1
+            combinations_multiple_terms = generate_combinations(st.session_state["terms"], min_terms=num_terms)
             for combo in combinations_multiple_terms:
-                for year in range(start_year, end_year + 1):
-                    _, ids = fetch_article_counts(combo, year, max_results=max_articles)
+                for year in range(st.session_state["start_year"], st.session_state["end_year"] + 1):
+                    _, ids = fetch_article_counts(combo, year, max_results=st.session_state["max_articles"])
                     if ids:
-                        articles = fetch_article_details(ids[:max_articles])
+                        articles = fetch_article_details(ids[:st.session_state["max_articles"]])
                         detailed_articles.extend(articles)
 
                         # Interrompe a busca ao atingir o limite de artigos
-                        if len(detailed_articles) >= max_articles:
+                        if len(detailed_articles) >= st.session_state["max_articles"]:
                             break
-                if len(detailed_articles) >= max_articles:
+                if len(detailed_articles) >= st.session_state["max_articles"]:
                     break
-            if len(detailed_articles) >= max_articles:
+            if len(detailed_articles) >= st.session_state["max_articles"]:
                 break
 
-        if detailed_articles:
+        st.session_state["df_relevant"] = pd.DataFrame(detailed_articles[:st.session_state["max_articles"]])
+        if not st.session_state["df_relevant"].empty:
             st.subheader("Artigos Mais Relevantes")
-            df_relevant = pd.DataFrame(detailed_articles)
-            st.write(df_relevant)
+            st.write(st.session_state["df_relevant"])
 
-            # Baixar a segunda tabela
-            download_as_txt(df_relevant, "artigos_mais_relevantes")
-            download_as_xlsx(df_relevant, "artigos_mais_relevantes")
-
-        else:
-            st.write("Nenhum artigo relevante encontrado para os termos fornecidos.")
+        # Baixar a segunda tabela
+        download_as_txt(st.session_state["df_relevant"], "artigos_mais_relevantes")
+        download_as_xlsx(st.session_state["df_relevant"], "artigos_mais_relevantes")
 
 if __name__ == "__main__":
     main()
