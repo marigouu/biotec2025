@@ -149,3 +149,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+#Disponível em https://revisaobibliografica.streamlit.app/
